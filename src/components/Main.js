@@ -24,25 +24,21 @@ function Main({
   const useMountEffect = (func) => useEffect(func, []);
 
   useMountEffect(() => {
-    api.getUser().then(({ name, about, avatar }) => {
-      setUserAvatar(avatar);
-      setUserDescription(about);
-      setUserName(name);
-    });
-  });
-
-  useMountEffect(() => {
     const getInitalCards = api.getInitialCards();
     const getUser = api.getUser();
+
     Promise.all([getInitalCards, getUser]).then((data) => {
       const [initialCards, user] = data;
-      const userId = user._id;
+      const { name, about, avatar, _id: userId } = user;
       const updatedCards = initialCards.map((card) => ({
         ...card,
         belongsToUser: card.owner._id === userId,
         isLiked: card.likes.some((user) => user._id === userId),
       }));
 
+      setUserAvatar(avatar);
+      setUserDescription(about);
+      setUserName(name);
       setCards(updatedCards);
     });
   });
