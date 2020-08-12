@@ -17,28 +17,28 @@ function App() {
   }
 
   function handleEditAvatarClick() {
-    document.addEventListener('keyup', handleEscPopupClose);
+    window.addEventListener('keyup', handleEscPopupClose);
     setIsEditAvatarPopupOpen(true);
   }
 
   function handleEditProfileClick() {
-    document.addEventListener('keyup', handleEscPopupClose);
+    window.addEventListener('keyup', handleEscPopupClose);
     setIsEditProfilePopupOpen(true);
   }
 
   function handleAddPlaceClick() {
-    document.addEventListener('keyup', handleEscPopupClose);
+    window.addEventListener('keyup', handleEscPopupClose);
     setIsAddPlacePopupOpen(true);
   }
 
   function handleCardClick(card) {
     setSelectedCard(card);
-    document.addEventListener('keyup', handleEscPopupClose);
+    window.addEventListener('keyup', handleEscPopupClose);
     setIsImagePopupOpen(true);
   }
 
   function closeAllPopups() {
-    document.removeEventListener('keyup', handleEscPopupClose);
+    window.removeEventListener('keyup', handleEscPopupClose);
     setIsAddPlacePopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
