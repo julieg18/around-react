@@ -39,6 +39,13 @@ function Main({
     });
   }
 
+  function handleCardDelete(cardId) {
+    api.deleteCard(cardId).then(() => {
+      const newCards = cards.filter((c) => c._id !== cardId);
+      setCards(newCards);
+    });
+  }
+
   return (
     <main>
       <section className="profile">
@@ -71,6 +78,7 @@ function Main({
         <ul className="elements__list">
           {cards.map((card) => (
             <Card
+              onCardDelete={handleCardDelete}
               onCardLike={handleCardLike}
               onCardClick={onCardClick}
               card={card}
