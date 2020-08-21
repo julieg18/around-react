@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
+import CurrentUserContext from '../contexts/CurrentUserContext';
+import api from '../utils/api';
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
@@ -9,6 +11,15 @@ function App() {
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState({});
+  const [currentUser, setCurrentUser] = useState({});
+
+  const useMountEffect = (func) => useEffect(func, []);
+
+  useMountEffect(() => {
+    api.getUser().then((user) => {
+      setCurrentUser(user);
+    });
+  });
 
   function handleEscPopupClose(e) {
     if (e.key === 'Escape') {
@@ -46,7 +57,7 @@ function App() {
   }
 
   return (
-    <>
+    <CurrentUserContext.Provider value={currentUser}>
       <Header />
       <Main
         onEditAvatar={handleEditAvatarClick}
@@ -61,7 +72,7 @@ function App() {
         selectedCard={selectedCard}
       />
       <Footer />
-    </>
+    </CurrentUserContext.Provider>
   );
 }
 

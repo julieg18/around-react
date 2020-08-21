@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import Card from './Card';
 import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
 import api from '../utils/api';
+import CurrentUserContext from '../contexts/CurrentUserContext';
 import avatarImage from '../images/avatar-image.jpg';
 
 function Main({
@@ -17,29 +18,13 @@ function Main({
   onClosePopup,
   selectedCard,
 }) {
-  const [userAvatar, setUserAvatar] = useState('');
-  const [userDescription, setUserDescription] = useState('');
-  const [userName, setUserName] = useState('');
+  const { avatar, about, name } = useContext(CurrentUserContext);
   const [cards, setCards] = useState([]);
   const useMountEffect = (func) => useEffect(func, []);
 
   useMountEffect(() => {
-    const getInitalCards = api.getInitialCards();
-    const getUser = api.getUser();
-
-    Promise.all([getInitalCards, getUser]).then((data) => {
-      const [initialCards, user] = data;
-      const { name, about, avatar, _id: userId } = user;
-      const updatedCards = initialCards.map((card) => ({
-        ...card,
-        belongsToUser: card.owner._id === userId,
-        isLiked: card.likes.some((user) => user._id === userId),
-      }));
-
-      setUserAvatar(avatar);
-      setUserDescription(about);
-      setUserName(name);
-      setCards(updatedCards);
+    api.getInitialCards().then((initialCards) => {
+      setCards(initialCards);
     });
   });
 
@@ -48,7 +33,7 @@ function Main({
       <section className="profile">
         <div className="profile__avatar">
           <img
-            src={userAvatar || avatarImage}
+            src={avatar || avatarImage}
             alt="avatar"
             className="profile__avatar-img"
           />
@@ -58,12 +43,12 @@ function Main({
           ></button>
         </div>
         <div className="profile__info">
-          <p className="profile__name">{userName}</p>
+          <p className="profile__name">{name}</p>
           <button
             className="button profile__button profile__button_type_edit"
             onClick={onEditProfile}
           ></button>
-          <p className="profile__job">{userDescription}</p>
+          <p className="profile__job">{about}</p>
         </div>
         <button
           className="button profile__button profile__button_type_add"
