@@ -18,7 +18,9 @@ function Main({
   onClosePopup,
   selectedCard,
 }) {
-  const { avatar, about, name } = useContext(CurrentUserContext);
+  const { avatar, about, name, _id: currentUserId } = useContext(
+    CurrentUserContext,
+  );
   const [cards, setCards] = useState([]);
   const useMountEffect = (func) => useEffect(func, []);
 
@@ -27,6 +29,15 @@ function Main({
       setCards(initialCards);
     });
   });
+
+  function handleCardLike(card) {
+    const cardWasLiked = !card.likes.some((c) => c._id === currentUserId);
+
+    api.editCardLikes({ cardWasLiked, cardId: card._id }).then((newCard) => {
+      const newCards = cards.map((c) => (c._id === card._id ? newCard : c));
+      setCards(newCards);
+    });
+  }
 
   return (
     <main>
@@ -59,7 +70,12 @@ function Main({
       <section className="elements">
         <ul className="elements__list">
           {cards.map((card) => (
-            <Card onCardClick={onCardClick} card={card} key={card._id} />
+            <Card
+              onCardLike={handleCardLike}
+              onCardClick={onCardClick}
+              card={card}
+              key={card._id}
+            />
           ))}
         </ul>
       </section>

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import CurrentUserContext from '../contexts/CurrentUserContext';
 
-function Card({ onCardClick, card }) {
+function Card({ onCardLike, onCardClick, card }) {
   const { _id: userId } = useContext(CurrentUserContext);
   const {
     link,
@@ -14,6 +14,10 @@ function Card({ onCardClick, card }) {
 
   function handleClick() {
     onCardClick(card);
+  }
+
+  function handleLikeClick() {
+    onCardLike(card);
   }
 
   return (
@@ -32,6 +36,7 @@ function Card({ onCardClick, card }) {
       <div className="element__info">
         <p className="element__title">{name}</p>
         <button
+          onClick={handleLikeClick}
           className={`button element__like-button ${
             isLiked && 'element__like-button_active'
           }`}
