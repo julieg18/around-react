@@ -1,6 +1,6 @@
 import React from 'react';
 
-function PopupWithForm({ title, name, isOpen, children, onClose }) {
+function PopupWithForm({ title, name, isOpen, children, onClose, onSubmit }) {
   function checkIfPopupOverlayWasClicked(e) {
     if (e.target.classList.contains('popup')) {
       onClose();
@@ -17,7 +17,7 @@ function PopupWithForm({ title, name, isOpen, children, onClose }) {
           className="button popup__exit-button"
           onClick={onClose}
         ></button>
-        <form className={`form form_type_${name}`}>
+        <form onSubmit={onSubmit} className={`form form_type_${name}`}>
           <h1 className="form__heading">{title}</h1>
           {children}
         </form>

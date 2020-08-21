@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react';
 import Card from './Card';
-import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
+import PopupWithForm from './PopupWithForm';
+import EditProfilePopup from './EditProfilePopup';
 import api from '../utils/api';
 import CurrentUserContext from '../contexts/CurrentUserContext';
 import avatarImage from '../images/avatar-image.jpg';
@@ -16,6 +17,7 @@ function Main({
   isAddPlacePopupOpen,
   isImagePopupOpen,
   onClosePopup,
+  onUpdateUser,
   selectedCard,
 }) {
   const { avatar, about, name, _id: currentUserId } = useContext(
@@ -88,44 +90,11 @@ function Main({
         </ul>
       </section>
 
-      <PopupWithForm
-        name="edit-profile-form"
-        title="Edit profile"
+      <EditProfilePopup
         isOpen={isEditProfilePopupOpen}
         onClose={onClosePopup}
-      >
-        <label className="form__label" htmlFor="name-field">
-          <input
-            defaultValue="Jacques Cousteau"
-            type="text"
-            className="form__field form__field_type_name"
-            id="name-field"
-            minLength="2"
-            maxLength="40"
-            pattern="[a-zA-Z -]{1,}"
-            required
-          />
-          <span className="form__field-error" id="name-field-error"></span>
-        </label>
-        <label className="form__label" htmlFor="job-field">
-          <input
-            defaultValue="Explorer"
-            type="text"
-            className="form__field form__field_type_job"
-            id="job-field"
-            minLength="2"
-            maxLength="200"
-            required
-          />
-          <span className="form__field-error" id="job-field-error"></span>
-        </label>
-        <button
-          type="submit"
-          className="form__submit-button form__submit-button_type_edit-profile"
-        >
-          Save
-        </button>
-      </PopupWithForm>
+        onUpdateUser={onUpdateUser}
+      />
 
       <PopupWithForm
         name="add-card-form"
