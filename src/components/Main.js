@@ -3,6 +3,7 @@ import Card from './Card';
 import ImagePopup from './ImagePopup';
 import PopupWithForm from './PopupWithForm';
 import EditProfilePopup from './EditProfilePopup';
+import EditAvatarProfilePopup from './EditAvatarProfilePopup';
 import api from '../utils/api';
 import CurrentUserContext from '../contexts/CurrentUserContext';
 import avatarImage from '../images/avatar-image.jpg';
@@ -18,6 +19,7 @@ function Main({
   isImagePopupOpen,
   onClosePopup,
   onUpdateUser,
+  onUpdateAvatar,
   selectedCard,
 }) {
   const { avatar, about, name, _id: currentUserId } = useContext(
@@ -96,6 +98,12 @@ function Main({
         onUpdateUser={onUpdateUser}
       />
 
+      <EditAvatarProfilePopup
+        isOpen={isEditAvatarPopupOpen}
+        onClose={onClosePopup}
+        onUpdateAvatar={onUpdateAvatar}
+      />
+
       <PopupWithForm
         name="add-card-form"
         title="New place"
@@ -129,33 +137,6 @@ function Main({
           className="form__submit-button form__submit-button_type_add-card"
         >
           Create
-        </button>
-      </PopupWithForm>
-
-      <PopupWithForm
-        name="change-avatar-form"
-        title="Change profile picture"
-        isOpen={isEditAvatarPopupOpen}
-        onClose={onClosePopup}
-      >
-        <label htmlFor="avatar-img-field" className="form__label">
-          <input
-            placeholder="Image-link"
-            type="url"
-            className="form__field form__field_type_avatar-img"
-            id="avatar-img-field"
-            required
-          />
-          <span
-            className="form__field-error"
-            id="avatar-img-field-error"
-          ></span>
-        </label>
-        <button
-          type="submit"
-          className="form__submit-button form__submit-button_inactive form__submit-button_type_change-avatar"
-        >
-          Save
         </button>
       </PopupWithForm>
 

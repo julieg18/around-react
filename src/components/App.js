@@ -63,6 +63,13 @@ function App() {
     });
   }
 
+  function handleUpdateAvatar(avatar) {
+    api.editUserAvatar(avatar).then((newUserInfo) => {
+      setCurrentUser(newUserInfo);
+      closeAllPopups();
+    });
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <Header />
@@ -71,6 +78,7 @@ function App() {
         onEditProfile={handleEditProfileClick}
         onAddPlace={handleAddPlaceClick}
         onUpdateUser={handleUpdateUser}
+        onUpdateAvatar={handleUpdateAvatar}
         onCardClick={handleCardClick}
         isAddPlacePopupOpen={isAddPlacePopupOpen}
         isEditProfilePopupOpen={isEditProfilePopupOpen}
