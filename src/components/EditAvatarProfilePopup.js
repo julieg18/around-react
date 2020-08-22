@@ -10,6 +10,8 @@ function EditAvatarProfilePopup({ isOpen, onClose, onUpdateAvatar }) {
     onUpdateAvatar({
       avatar: avatarInput.current.value,
     });
+
+    avatarInput.current.value = '';
   }
 
   return (

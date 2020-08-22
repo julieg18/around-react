@@ -1,14 +1,17 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import Card from './Card';
 import ImagePopup from './ImagePopup';
 import PopupWithForm from './PopupWithForm';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarProfilePopup from './EditAvatarProfilePopup';
-import api from '../utils/api';
+import AddPlacePopup from './AddPlacePopup';
 import CurrentUserContext from '../contexts/CurrentUserContext';
 import avatarImage from '../images/avatar-image.jpg';
 
 function Main({
+  cards,
+  onCardLike,
+  onCardDelete,
   onEditAvatar,
   onEditProfile,
   onAddPlace,
@@ -20,35 +23,10 @@ function Main({
   onClosePopup,
   onUpdateUser,
   onUpdateAvatar,
+  onCreatePlace,
   selectedCard,
 }) {
-  const { avatar, about, name, _id: currentUserId } = useContext(
-    CurrentUserContext,
-  );
-  const [cards, setCards] = useState([]);
-  const useMountEffect = (func) => useEffect(func, []);
-
-  useMountEffect(() => {
-    api.getInitialCards().then((initialCards) => {
-      setCards(initialCards);
-    });
-  });
-
-  function handleCardLike(card) {
-    const cardWasLiked = !card.likes.some((c) => c._id === currentUserId);
-
-    api.editCardLikes({ cardWasLiked, cardId: card._id }).then((newCard) => {
-      const newCards = cards.map((c) => (c._id === card._id ? newCard : c));
-      setCards(newCards);
-    });
-  }
-
-  function handleCardDelete(cardId) {
-    api.deleteCard(cardId).then(() => {
-      const newCards = cards.filter((c) => c._id !== cardId);
-      setCards(newCards);
-    });
-  }
+  const { avatar, about, name } = useContext(CurrentUserContext);
 
   return (
     <main>
@@ -82,8 +60,8 @@ function Main({
         <ul className="elements__list">
           {cards.map((card) => (
             <Card
-              onCardDelete={handleCardDelete}
-              onCardLike={handleCardLike}
+              onCardDelete={onCardDelete}
+              onCardLike={onCardLike}
               onCardClick={onCardClick}
               card={card}
               key={card._id}
@@ -104,41 +82,11 @@ function Main({
         onUpdateAvatar={onUpdateAvatar}
       />
 
-      <PopupWithForm
-        name="add-card-form"
-        title="New place"
+      <AddPlacePopup
         isOpen={isAddPlacePopupOpen}
         onClose={onClosePopup}
-      >
-        <label htmlFor="title-field" className="form__label">
-          <input
-            placeholder="Title"
-            type="text"
-            className="form__field form__field_type_title"
-            id="title-field"
-            minLength="2"
-            maxLength="30"
-            required
-          />
-          <span className="form__field-error" id="title-field-error"></span>
-        </label>
-        <label htmlFor="img-link-field" className="form__label">
-          <input
-            placeholder="Image-link"
-            type="url"
-            className="form__field form__field_type_img-link"
-            id="img-link-field"
-            required
-          />
-          <span className="form__field-error" id="img-link-field-error"></span>
-        </label>
-        <button
-          type="submit"
-          className="form__submit-button form__submit-button_type_add-card"
-        >
-          Create
-        </button>
-      </PopupWithForm>
+        onCreatePlace={onCreatePlace}
+      />
 
       <PopupWithForm
         name="delete-cart-form"

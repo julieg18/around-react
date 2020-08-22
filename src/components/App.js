@@ -12,6 +12,7 @@ function App() {
   const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState({});
   const [currentUser, setCurrentUser] = useState({});
+  const [cards, setCards] = useState([]);
 
   const useMountEffect = (func) => useEffect(func, []);
 
@@ -19,7 +20,27 @@ function App() {
     api.getUser().then((user) => {
       setCurrentUser(user);
     });
+
+    api.getInitialCards().then((initialCards) => {
+      setCards(initialCards);
+    });
   });
+
+  function handleCardLike(card) {
+    const cardWasLiked = !card.likes.some((c) => c._id === currentUser._id);
+
+    api.editCardLikes({ cardWasLiked, cardId: card._id }).then((newCard) => {
+      const newCards = cards.map((c) => (c._id === card._id ? newCard : c));
+      setCards(newCards);
+    });
+  }
+
+  function handleCardDelete(cardId) {
+    api.deleteCard(cardId).then(() => {
+      const newCards = cards.filter((c) => c._id !== cardId);
+      setCards(newCards);
+    });
+  }
 
   function handleEscPopupClose(e) {
     if (e.key === 'Escape') {
@@ -70,22 +91,33 @@ function App() {
     });
   }
 
+  function handleCreatePlace(place) {
+    return api.addCard(place).then((newCard) => {
+      setCards([newCard, ...cards]);
+      closeAllPopups();
+    });
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <Header />
       <Main
+        selectedCard={selectedCard}
+        cards={cards}
         onEditAvatar={handleEditAvatarClick}
         onEditProfile={handleEditProfileClick}
         onAddPlace={handleAddPlaceClick}
         onUpdateUser={handleUpdateUser}
         onUpdateAvatar={handleUpdateAvatar}
+        onCreatePlace={handleCreatePlace}
         onCardClick={handleCardClick}
+        onCardLike={handleCardLike}
+        onCardDelete={handleCardDelete}
         isAddPlacePopupOpen={isAddPlacePopupOpen}
         isEditProfilePopupOpen={isEditProfilePopupOpen}
         isEditAvatarPopupOpen={isEditAvatarPopupOpen}
         isImagePopupOpen={isImagePopupOpen}
         onClosePopup={closeAllPopups}
-        selectedCard={selectedCard}
       />
       <Footer />
     </CurrentUserContext.Provider>
