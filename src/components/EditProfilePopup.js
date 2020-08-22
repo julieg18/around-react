@@ -31,49 +31,47 @@ const EditProfilePopup = ({ isOpen, onClose, onUpdateUser }) => {
   }
 
   return (
-    <>
-      <PopupWithForm
-        name="edit-profile-form"
-        title="Edit profile"
-        isOpen={isOpen}
-        onClose={onClose}
-        onSubmit={handleSubmit}
+    <PopupWithForm
+      name="edit-profile-form"
+      title="Edit profile"
+      isOpen={isOpen}
+      onClose={onClose}
+      onSubmit={handleSubmit}
+    >
+      <label className="form__label" htmlFor="name-field">
+        <input
+          onChange={handleNameInputChange}
+          defaultValue={name}
+          type="text"
+          className="form__field form__field_type_name"
+          id="name-field"
+          minLength="2"
+          maxLength="40"
+          pattern="[a-zA-Z -]{1,}"
+          required
+        />
+        <span className="form__field-error" id="name-field-error"></span>
+      </label>
+      <label className="form__label" htmlFor="job-field">
+        <input
+          onChange={handleDescriptionInputChange}
+          defaultValue={description}
+          type="text"
+          className="form__field form__field_type_job"
+          id="job-field"
+          minLength="2"
+          maxLength="200"
+          required
+        />
+        <span className="form__field-error" id="job-field-error"></span>
+      </label>
+      <button
+        type="submit"
+        className="form__submit-button form__submit-button_type_edit-profile"
       >
-        <label className="form__label" htmlFor="name-field">
-          <input
-            onChange={handleNameInputChange}
-            defaultValue={name}
-            type="text"
-            className="form__field form__field_type_name"
-            id="name-field"
-            minLength="2"
-            maxLength="40"
-            pattern="[a-zA-Z -]{1,}"
-            required
-          />
-          <span className="form__field-error" id="name-field-error"></span>
-        </label>
-        <label className="form__label" htmlFor="job-field">
-          <input
-            onChange={handleDescriptionInputChange}
-            defaultValue={description}
-            type="text"
-            className="form__field form__field_type_job"
-            id="job-field"
-            minLength="2"
-            maxLength="200"
-            required
-          />
-          <span className="form__field-error" id="job-field-error"></span>
-        </label>
-        <button
-          type="submit"
-          className="form__submit-button form__submit-button_type_edit-profile"
-        >
-          Save
-        </button>
-      </PopupWithForm>
-    </>
+        Save
+      </button>
+    </PopupWithForm>
   );
 };
 
