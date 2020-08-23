@@ -78,14 +78,14 @@ function App() {
   }
 
   function handleUpdateUser(newUserInfo) {
-    api.editUserInfo(newUserInfo).then((newUserInfo) => {
+    return api.editUserInfo(newUserInfo).then((newUserInfo) => {
       setCurrentUser(newUserInfo);
       closeAllPopups();
     });
   }
 
   function handleUpdateAvatar(avatar) {
-    api.editUserAvatar(avatar).then((newUserInfo) => {
+    return api.editUserAvatar(avatar).then((newUserInfo) => {
       setCurrentUser(newUserInfo);
       closeAllPopups();
     });

@@ -1,17 +1,20 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import PopupWithForm from './PopupWithForm';
 
 function EditAvatarProfilePopup({ isOpen, onClose, onUpdateAvatar }) {
   const avatarInput = useRef(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   function handleSubmit(e) {
     e.preventDefault();
 
+    setIsLoading(true);
     onUpdateAvatar({
       avatar: avatarInput.current.value,
+    }).then(() => {
+      setIsLoading(false);
+      avatarInput.current.value = '';
     });
-
-    avatarInput.current.value = '';
   }
 
   return (
@@ -37,7 +40,7 @@ function EditAvatarProfilePopup({ isOpen, onClose, onUpdateAvatar }) {
         type="submit"
         className="form__submit-button form__submit-button_type_change-avatar"
       >
-        Save
+        {isLoading ? 'Saving...' : 'Save'}
       </button>
     </PopupWithForm>
   );

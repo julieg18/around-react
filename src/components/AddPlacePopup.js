@@ -4,14 +4,20 @@ import PopupWithForm from './PopupWithForm';
 function AddPlacePopup({ isOpen, onClose, onCreatePlace }) {
   const [name, setName] = useState('');
   const [link, setLink] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   function handleSubmit(e) {
     e.preventDefault();
 
-    onCreatePlace({ name, link }).then(() => {
-      setName('');
-      setLink('');
-    });
+    setIsLoading(true);
+    onCreatePlace({ name, link })
+      .then(() => {
+        setName('');
+        setLink('');
+      })
+      .then(() => {
+        setIsLoading(false);
+      });
   }
 
   function handleTitleInputChange(e) {
@@ -60,7 +66,7 @@ function AddPlacePopup({ isOpen, onClose, onCreatePlace }) {
         type="submit"
         className="form__submit-button form__submit-button_type_add-card"
       >
-        Create
+        {isLoading ? 'Saving...' : 'Create'}
       </button>
     </PopupWithForm>
   );

@@ -5,6 +5,7 @@ import CurrentUserContext from '../contexts/CurrentUserContext';
 const EditProfilePopup = ({ isOpen, onClose, onUpdateUser }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const CurrentUser = useContext(CurrentUserContext);
 
   useEffect(() => {
@@ -24,9 +25,12 @@ const EditProfilePopup = ({ isOpen, onClose, onUpdateUser }) => {
   function handleSubmit(e) {
     e.preventDefault();
 
+    setIsLoading(true);
     onUpdateUser({
       name,
       about: description,
+    }).then(() => {
+      setIsLoading(false);
     });
   }
 
@@ -69,7 +73,7 @@ const EditProfilePopup = ({ isOpen, onClose, onUpdateUser }) => {
         type="submit"
         className="form__submit-button form__submit-button_type_edit-profile"
       >
-        Save
+        {isLoading ? 'Saving...' : 'Save'}
       </button>
     </PopupWithForm>
   );
