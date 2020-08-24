@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
 import Card from './Card';
 import ImagePopup from './ImagePopup';
-import PopupWithForm from './PopupWithForm';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarProfilePopup from './EditAvatarProfilePopup';
 import AddPlacePopup from './AddPlacePopup';
+import DeleteCardPopup from './DeleteCardPopup';
 import CurrentUserContext from '../contexts/CurrentUserContext';
 import avatarImage from '../images/avatar-image.jpg';
 
@@ -16,9 +16,11 @@ function Main({
   onEditProfile,
   onAddPlace,
   onCardClick,
+  onDeleteCardClick,
   isEditAvatarPopupOpen,
   isEditProfilePopupOpen,
   isAddPlacePopupOpen,
+  isDeleteCardPopupOpen,
   isImagePopupOpen,
   onClosePopup,
   onUpdateUser,
@@ -60,7 +62,7 @@ function Main({
         <ul className="elements__list">
           {cards.map((card) => (
             <Card
-              onCardDelete={onCardDelete}
+              onCardDelete={onDeleteCardClick}
               onCardLike={onCardLike}
               onCardClick={onCardClick}
               card={card}
@@ -88,20 +90,16 @@ function Main({
         onCreatePlace={onCreatePlace}
       />
 
-      <PopupWithForm
-        name="delete-cart-form"
-        title="Are you sure?"
-        onClose={onClosePopup}
-      >
-        <button className="form__submit-button form__submit-button_type_delete-card">
-          Yes
-        </button>
-      </PopupWithForm>
-
       <ImagePopup
         isOpen={isImagePopupOpen}
         card={selectedCard}
         onClose={onClosePopup}
+      />
+
+      <DeleteCardPopup
+        isOpen={isDeleteCardPopupOpen}
+        onClose={onClosePopup}
+        onDeleteCard={onCardDelete}
       />
     </main>
   );

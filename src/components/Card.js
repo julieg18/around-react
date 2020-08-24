@@ -21,7 +21,7 @@ function Card({ onCardDelete, onCardLike, onCardClick, card }) {
   }
 
   function handleDeleteClick() {
-    onCardDelete(card._id);
+    onCardDelete(card);
   }
 
   return (

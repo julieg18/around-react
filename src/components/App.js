@@ -10,6 +10,7 @@ function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
+  const [isDeleteCardPopupOpen, setIsDeleteCardPopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState({});
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
@@ -35,10 +36,11 @@ function App() {
     });
   }
 
-  function handleCardDelete(cardId) {
-    api.deleteCard(cardId).then(() => {
-      const newCards = cards.filter((c) => c._id !== cardId);
+  function handleCardDelete() {
+    return api.deleteCard(selectedCard._id).then(() => {
+      const newCards = cards.filter((c) => c._id !== selectedCard._id);
       setCards(newCards);
+      closeAllPopups();
     });
   }
 
@@ -69,12 +71,19 @@ function App() {
     setIsImagePopupOpen(true);
   }
 
+  function handleDeleteCardClick(card) {
+    setSelectedCard(card);
+    window.addEventListener('keyup', handleEscPopupClose);
+    setIsDeleteCardPopupOpen(true);
+  }
+
   function closeAllPopups() {
     window.removeEventListener('keyup', handleEscPopupClose);
     setIsAddPlacePopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
     setIsImagePopupOpen(false);
+    setIsDeleteCardPopupOpen(false);
   }
 
   function handleUpdateUser(newUserInfo) {
@@ -107,6 +116,7 @@ function App() {
         onEditAvatar={handleEditAvatarClick}
         onEditProfile={handleEditProfileClick}
         onAddPlace={handleAddPlaceClick}
+        onDeleteCardClick={handleDeleteCardClick}
         onUpdateUser={handleUpdateUser}
         onUpdateAvatar={handleUpdateAvatar}
         onCreatePlace={handleCreatePlace}
@@ -116,6 +126,7 @@ function App() {
         isAddPlacePopupOpen={isAddPlacePopupOpen}
         isEditProfilePopupOpen={isEditProfilePopupOpen}
         isEditAvatarPopupOpen={isEditAvatarPopupOpen}
+        isDeleteCardPopupOpen={isDeleteCardPopupOpen}
         isImagePopupOpen={isImagePopupOpen}
         onClosePopup={closeAllPopups}
       />
