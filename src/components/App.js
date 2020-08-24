@@ -27,23 +27,6 @@ function App() {
     });
   });
 
-  function handleCardLike(card) {
-    const cardWasLiked = !card.likes.some((c) => c._id === currentUser._id);
-
-    api.editCardLikes({ cardWasLiked, cardId: card._id }).then((newCard) => {
-      const newCards = cards.map((c) => (c._id === card._id ? newCard : c));
-      setCards(newCards);
-    });
-  }
-
-  function handleCardDelete() {
-    return api.deleteCard(selectedCard._id).then(() => {
-      const newCards = cards.filter((c) => c._id !== selectedCard._id);
-      setCards(newCards);
-      closeAllPopups();
-    });
-  }
-
   function handleEscPopupClose(e) {
     if (e.key === 'Escape') {
       closeAllPopups();
@@ -84,6 +67,23 @@ function App() {
     setIsEditAvatarPopupOpen(false);
     setIsImagePopupOpen(false);
     setIsDeleteCardPopupOpen(false);
+  }
+
+  function handleCardLike(card) {
+    const cardWasLiked = !card.likes.some((c) => c._id === currentUser._id);
+
+    api.editCardLikes({ cardWasLiked, cardId: card._id }).then((newCard) => {
+      const newCards = cards.map((c) => (c._id === card._id ? newCard : c));
+      setCards(newCards);
+    });
+  }
+
+  function handleCardDelete() {
+    return api.deleteCard(selectedCard._id).then(() => {
+      const newCards = cards.filter((c) => c._id !== selectedCard._id);
+      setCards(newCards);
+      closeAllPopups();
+    });
   }
 
   function handleUpdateUser(newUserInfo) {

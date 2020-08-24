@@ -3,26 +3,14 @@ import PopupWithForm from './PopupWithForm';
 
 function AddPlacePopup({ isOpen, onClose, onCreatePlace }) {
   const [name, setName] = useState('');
-  const [link, setLink] = useState('');
-  const [nameValidationMessage, setNameValidationMessage] = useState('');
-  const [linkValidationMessage, setLinkValidationMessage] = useState('');
   const [isNameValid, setIsNameValid] = useState(true);
+  const [nameValidationMessage, setNameValidationMessage] = useState('');
+
+  const [link, setLink] = useState('');
   const [isLinkValid, setIsLinkValid] = useState(true);
+  const [linkValidationMessage, setLinkValidationMessage] = useState('');
+
   const [isLoading, setIsLoading] = useState(false);
-
-  function handleSubmit(e) {
-    e.preventDefault();
-
-    setIsLoading(true);
-    onCreatePlace({ name, link })
-      .then(() => {
-        setName('');
-        setLink('');
-      })
-      .then(() => {
-        setIsLoading(false);
-      });
-  }
 
   function handleTitleInputChange(e) {
     const input = e.target;
@@ -36,6 +24,20 @@ function AddPlacePopup({ isOpen, onClose, onCreatePlace }) {
     setLink(input.value);
     setIsLinkValid(input.validity.valid);
     setLinkValidationMessage(input.validationMessage);
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    setIsLoading(true);
+    onCreatePlace({ name, link })
+      .then(() => {
+        setName('');
+        setLink('');
+      })
+      .then(() => {
+        setIsLoading(false);
+      });
   }
 
   return (
