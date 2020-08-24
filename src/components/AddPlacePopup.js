@@ -4,6 +4,10 @@ import PopupWithForm from './PopupWithForm';
 function AddPlacePopup({ isOpen, onClose, onCreatePlace }) {
   const [name, setName] = useState('');
   const [link, setLink] = useState('');
+  const [nameValidationMessage, setNameValidationMessage] = useState('');
+  const [linkValidationMessage, setLinkValidationMessage] = useState('');
+  const [isNameValid, setIsNameValid] = useState(true);
+  const [isLinkValid, setIsLinkValid] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
   function handleSubmit(e) {
@@ -21,11 +25,17 @@ function AddPlacePopup({ isOpen, onClose, onCreatePlace }) {
   }
 
   function handleTitleInputChange(e) {
-    setName(e.target.value);
+    const input = e.target;
+    setName(input.value);
+    setIsNameValid(input.validity.valid);
+    setNameValidationMessage(input.validationMessage);
   }
 
   function handleImgInputChange(e) {
-    setLink(e.target.value);
+    const input = e.target;
+    setLink(input.value);
+    setIsLinkValid(input.validity.valid);
+    setLinkValidationMessage(input.validationMessage);
   }
 
   return (
@@ -42,13 +52,22 @@ function AddPlacePopup({ isOpen, onClose, onCreatePlace }) {
           value={name}
           placeholder="Title"
           type="text"
-          className="form__field form__field_type_title"
+          className={`form__field form__field_type_title ${
+            !isNameValid && 'form__field_type_error'
+          }`}
           id="title-field"
           minLength="2"
           maxLength="30"
           required
         />
-        <span className="form__field-error" id="title-field-error"></span>
+        <span
+          className={`form__field-error ${
+            !isNameValid && 'form__field-error_active'
+          }`}
+          id="title-field-error"
+        >
+          {nameValidationMessage}
+        </span>
       </label>
       <label htmlFor="img-link-field" className="form__label">
         <input
@@ -56,15 +75,27 @@ function AddPlacePopup({ isOpen, onClose, onCreatePlace }) {
           placeholder="Image-link"
           type="url"
           value={link}
-          className="form__field form__field_type_img-link"
+          className={`form__field form__field_type_img-link ${
+            !isLinkValid && 'form__field_type_error'
+          }`}
           id="img-link-field"
           required
         />
-        <span className="form__field-error" id="img-link-field-error"></span>
+        <span
+          className={`form__field-error ${
+            !isLinkValid && 'form__field-error_active'
+          }`}
+          id="img-link-field-error"
+        >
+          {linkValidationMessage}
+        </span>
       </label>
       <button
         type="submit"
         className="form__submit-button form__submit-button_type_add-card"
+        disabled={
+          !isNameValid || !isLinkValid || name.length === 0 || link.length === 0
+        }
       >
         {isLoading ? 'Saving...' : 'Create'}
       </button>

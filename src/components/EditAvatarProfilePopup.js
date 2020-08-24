@@ -3,7 +3,17 @@ import PopupWithForm from './PopupWithForm';
 
 function EditAvatarProfilePopup({ isOpen, onClose, onUpdateAvatar }) {
   const avatarInput = useRef(null);
+  const [isAvatarValid, setIsAvatarValid] = useState(true);
+  const [avatarValidationMessage, setAvatarValidationMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isFormValid, setIsFormValid] = useState(false);
+
+  function handleAvatarInputChange(e) {
+    const input = e.target;
+    setIsAvatarValid(input.validity.valid);
+    setAvatarValidationMessage(input.validationMessage);
+    setIsFormValid(input.validity.valid);
+  }
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -14,6 +24,7 @@ function EditAvatarProfilePopup({ isOpen, onClose, onUpdateAvatar }) {
     }).then(() => {
       setIsLoading(false);
       avatarInput.current.value = '';
+      setIsFormValid(false);
     });
   }
 
@@ -30,15 +41,26 @@ function EditAvatarProfilePopup({ isOpen, onClose, onUpdateAvatar }) {
           ref={avatarInput}
           placeholder="Image-link"
           type="url"
-          className="form__field form__field_type_avatar-img"
+          className={`form__field form__field_type_avatar-img ${
+            !isAvatarValid && 'form__field_type_error'
+          }`}
           id="avatar-img-field"
+          onChange={handleAvatarInputChange}
           required
         />
-        <span className="form__field-error" id="avatar-img-field-error"></span>
+        <span
+          className={`form__field-error ${
+            !isAvatarValid && 'form__field-error_active'
+          }`}
+          id="avatar-img-field-error"
+        >
+          {avatarValidationMessage}
+        </span>
       </label>
       <button
         type="submit"
         className="form__submit-button form__submit-button_type_change-avatar"
+        disabled={!isFormValid}
       >
         {isLoading ? 'Saving...' : 'Save'}
       </button>

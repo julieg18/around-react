@@ -5,7 +5,14 @@ import CurrentUserContext from '../contexts/CurrentUserContext';
 const EditProfilePopup = ({ isOpen, onClose, onUpdateUser }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
+  const [nameValidationMessage, setNameValidationMessage] = useState('');
+  const [
+    descriptionValidationMessage,
+    setDescriptionValidationMessage,
+  ] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isNameValid, setIsNameValid] = useState(true);
+  const [isDescriptionValid, setIsDescriptionValid] = useState(true);
   const CurrentUser = useContext(CurrentUserContext);
 
   useEffect(() => {
@@ -15,11 +22,17 @@ const EditProfilePopup = ({ isOpen, onClose, onUpdateUser }) => {
   }, [CurrentUser]);
 
   function handleNameInputChange(e) {
-    setName(e.target.value);
+    const input = e.target;
+    setName(input.value);
+    setIsNameValid(input.validity.valid);
+    setNameValidationMessage(input.validationMessage);
   }
 
   function handleDescriptionInputChange(e) {
-    setDescription(e.target.value);
+    const input = e.target;
+    setDescription(input.value);
+    setIsDescriptionValid(input.validity.valid);
+    setDescriptionValidationMessage(input.validationMessage);
   }
 
   function handleSubmit(e) {
@@ -47,31 +60,50 @@ const EditProfilePopup = ({ isOpen, onClose, onUpdateUser }) => {
           onChange={handleNameInputChange}
           defaultValue={name}
           type="text"
-          className="form__field form__field_type_name"
+          className={`form__field form__field_type_name ${
+            !isNameValid && 'form__field_type_error'
+          }`}
           id="name-field"
           minLength="2"
           maxLength="40"
           pattern="[a-zA-Z -]{1,}"
           required
         />
-        <span className="form__field-error" id="name-field-error"></span>
+        <span
+          className={`form__field-error ${
+            !isNameValid && 'form__field-error_active'
+          }`}
+          id="name-field-error"
+        >
+          {nameValidationMessage}
+        </span>
       </label>
       <label className="form__label" htmlFor="job-field">
         <input
           onChange={handleDescriptionInputChange}
           defaultValue={description}
           type="text"
-          className="form__field form__field_type_job"
+          className={`form__field form__field_type_job ${
+            !isDescriptionValid && 'form__field_type_error'
+          }`}
           id="job-field"
           minLength="2"
           maxLength="200"
           required
         />
-        <span className="form__field-error" id="job-field-error"></span>
+        <span
+          className={`form__field-error ${
+            !isDescriptionValid && 'form__field-error_active'
+          }`}
+          id="job-field-error"
+        >
+          {descriptionValidationMessage}
+        </span>
       </label>
       <button
         type="submit"
         className="form__submit-button form__submit-button_type_edit-profile"
+        disabled={!isNameValid || !isDescriptionValid}
       >
         {isLoading ? 'Saving...' : 'Save'}
       </button>
