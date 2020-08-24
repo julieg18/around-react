@@ -2,6 +2,11 @@ import React, { useState, useEffect } from 'react';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
+import ImagePopup from './ImagePopup';
+import EditProfilePopup from './EditProfilePopup';
+import EditAvatarProfilePopup from './EditAvatarProfilePopup';
+import AddPlacePopup from './AddPlacePopup';
+import DeleteCardPopup from './DeleteCardPopup';
 import CurrentUserContext from '../contexts/CurrentUserContext';
 import api from '../utils/api';
 
@@ -111,26 +116,45 @@ function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <Header />
       <Main
-        selectedCard={selectedCard}
         cards={cards}
         onEditAvatar={handleEditAvatarClick}
         onEditProfile={handleEditProfileClick}
         onAddPlace={handleAddPlaceClick}
-        onDeleteCardClick={handleDeleteCardClick}
-        onUpdateUser={handleUpdateUser}
-        onUpdateAvatar={handleUpdateAvatar}
-        onCreatePlace={handleCreatePlace}
+        onDeleteCard={handleDeleteCardClick}
         onCardClick={handleCardClick}
         onCardLike={handleCardLike}
-        onCardDelete={handleCardDelete}
-        isAddPlacePopupOpen={isAddPlacePopupOpen}
-        isEditProfilePopupOpen={isEditProfilePopupOpen}
-        isEditAvatarPopupOpen={isEditAvatarPopupOpen}
-        isDeleteCardPopupOpen={isDeleteCardPopupOpen}
-        isImagePopupOpen={isImagePopupOpen}
-        onClosePopup={closeAllPopups}
       />
       <Footer />
+
+      <EditProfilePopup
+        isOpen={isEditProfilePopupOpen}
+        onClose={closeAllPopups}
+        onUpdateUser={handleUpdateUser}
+      />
+
+      <EditAvatarProfilePopup
+        isOpen={isEditAvatarPopupOpen}
+        onClose={closeAllPopups}
+        onUpdateAvatar={handleUpdateAvatar}
+      />
+
+      <AddPlacePopup
+        isOpen={isAddPlacePopupOpen}
+        onClose={closeAllPopups}
+        onCreatePlace={handleCreatePlace}
+      />
+
+      <ImagePopup
+        isOpen={isImagePopupOpen}
+        card={selectedCard}
+        onClose={closeAllPopups}
+      />
+
+      <DeleteCardPopup
+        isOpen={isDeleteCardPopupOpen}
+        onClose={closeAllPopups}
+        onDeleteCard={handleCardDelete}
+      />
     </CurrentUserContext.Provider>
   );
 }

@@ -1,32 +1,16 @@
 import React, { useContext } from 'react';
 import Card from './Card';
-import ImagePopup from './ImagePopup';
-import EditProfilePopup from './EditProfilePopup';
-import EditAvatarProfilePopup from './EditAvatarProfilePopup';
-import AddPlacePopup from './AddPlacePopup';
-import DeleteCardPopup from './DeleteCardPopup';
 import CurrentUserContext from '../contexts/CurrentUserContext';
 import avatarImage from '../images/avatar-image.jpg';
 
 function Main({
   cards,
   onCardLike,
-  onCardDelete,
   onEditAvatar,
   onEditProfile,
   onAddPlace,
   onCardClick,
-  onDeleteCardClick,
-  isEditAvatarPopupOpen,
-  isEditProfilePopupOpen,
-  isAddPlacePopupOpen,
-  isDeleteCardPopupOpen,
-  isImagePopupOpen,
-  onClosePopup,
-  onUpdateUser,
-  onUpdateAvatar,
-  onCreatePlace,
-  selectedCard,
+  onDeleteCard,
 }) {
   const { avatar, about, name } = useContext(CurrentUserContext);
 
@@ -62,7 +46,7 @@ function Main({
         <ul className="elements__list">
           {cards.map((card) => (
             <Card
-              onCardDelete={onDeleteCardClick}
+              onCardDelete={onDeleteCard}
               onCardLike={onCardLike}
               onCardClick={onCardClick}
               card={card}
@@ -71,36 +55,6 @@ function Main({
           ))}
         </ul>
       </section>
-
-      <EditProfilePopup
-        isOpen={isEditProfilePopupOpen}
-        onClose={onClosePopup}
-        onUpdateUser={onUpdateUser}
-      />
-
-      <EditAvatarProfilePopup
-        isOpen={isEditAvatarPopupOpen}
-        onClose={onClosePopup}
-        onUpdateAvatar={onUpdateAvatar}
-      />
-
-      <AddPlacePopup
-        isOpen={isAddPlacePopupOpen}
-        onClose={onClosePopup}
-        onCreatePlace={onCreatePlace}
-      />
-
-      <ImagePopup
-        isOpen={isImagePopupOpen}
-        card={selectedCard}
-        onClose={onClosePopup}
-      />
-
-      <DeleteCardPopup
-        isOpen={isDeleteCardPopupOpen}
-        onClose={onClosePopup}
-        onDeleteCard={onCardDelete}
-      />
     </main>
   );
 }
